@@ -6,4 +6,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build WebRTC
-      run: ./build.ps1
+      run: ./build.sh
