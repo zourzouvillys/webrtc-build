@@ -11,7 +11,7 @@ fetch --nohooks webrtc
 
 gclient sync
 
-gn gen out/macos-x64 --args='target_os="macos" target_cpu="x64"'
+gn gen out/macos-x64 --args='target_os="mac" target_cpu="x64"'
 
 gn ls out/macos-x64
 
