@@ -44,14 +44,8 @@ jobs:
       working-directory: webrtc-checkout/src
       run: ninja -C out/Default 
 
-      # field_trial_default protobuf_lite p2p base jsoncpp
-      # - name: package
-      #   working-directory: webrtc-checkout/src/out/Default
-      #   run: tar -zvcf ~/WebRTC-macOS-x64.tar.gz WebRTC.framework
-
     - name: upload WebRTC.framework artifact
       uses: actions/upload-artifact@v2
-      working-directory: webrtc-checkout/src/out/Default
       with:
         name: WebRTC.framework
-        path: WebRTC.framework/
+        path: webrtc-checkout/src/out/Default/WebRTC.framework/
