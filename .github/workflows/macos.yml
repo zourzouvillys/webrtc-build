@@ -19,7 +19,6 @@ jobs:
     steps:
 
     - name: clone depot_tools
-      working-directory: webrtc-checkout
       run: |
         git clone --quiet --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
         echo "::add-path::$(pwd)/depot_tools"
