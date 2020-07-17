@@ -4,32 +4,22 @@ name: CI
 on: [push]
 
 jobs:
-
   macos:
-
     runs-on: macos-latest    
-
     steps:
-
-    - uses: actions/checkout@v2
-      name: checkout local repo
-
-    - uses: actions/checkout@v2
-      name: checkout depot_tools
-      with:
-        repository: https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        path: depot_tools
-        
-    - name: add depot_tools to path
-      run: echo "::add-path::$GITHUB_WORKSPACE/depot_tools"
-      
-
-
-
-
-    # - name: Build WebRTC
-    #   run: ./build.sh
-
-
-
-
+    - name: clone depot_tools
+      run: |
+        git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+        echo "::add-path::$(pwd)/depot_tools"
+    - name: fetch
+      working-directory: webrtc-checkout
+      run: fetch --nohooks webrtc
+    - name: sync
+      working-directory: webrtc-checkout
+      run: gclient sync
+    - name: generate build
+      working-directory: webrtc-checkout
+      run: gn gen out/Default
+    - name: build
+      working-directory: webrtc-checkout
+      run: ninja -C out/Default
