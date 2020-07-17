@@ -34,8 +34,7 @@ jobs:
 
     - name: generate build
       working-directory: webrtc-checkout/src
-      run: gn gen out/Default "--args=is_component_build=false is_debug=false symbol_level=0"
-      #  "--args=enable_iterator_debugging=false is_component_build=false is_debug=false symbol_level=1 "
+      run: gn gen out/Default "--args=enable_iterator_debugging=false is_component_build=false is_debug=false symbol_level=1 mac_deployment_target=10.15.0 mac_min_system_version=10.15.0 mac_sdk_min=10.15 proprietary_codecs=true rtc_build_examples=true rtc_include_ilbc=false rtc_opus_variable_complexity=true"
 
     - name: introspect build
       working-directory: webrtc-checkout/src
@@ -44,17 +43,15 @@ jobs:
     - name: build
       working-directory: webrtc-checkout/src
       run: ninja -C out/Default 
+
       # field_trial_default protobuf_lite p2p base jsoncpp
+      # - name: package
+      #   working-directory: webrtc-checkout/src/out/Default
+      #   run: tar -zvcf ~/WebRTC-macOS-x64.tar.gz WebRTC.framework
 
-    - name: package
+    - name: upload WebRTC.framework artifact
+      uses: actions/upload-artifact@v2
       working-directory: webrtc-checkout/src/out/Default
-      run:  |
-        ls -lah
-        du -sh *
-        tar -zvcf ~/source.tar.gz .
-        ls -lah ~/source.tar.gz
-
-    - uses: actions/upload-artifact@v2
       with:
-        name: source
-        path: ~/source.tar.gz
+        name: WebRTC.framework
+        path: WebRTC.framework/
