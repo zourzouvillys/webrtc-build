@@ -1,34 +1,52 @@
 
 name: CI
 
-on: [push]
+#on: [push]
 
 # -${{ hashFiles('**/lockfiles') }}  
 
+# export GYP_GENERATORS="ninja"
+# export GYP_DEFINES="build_with_libjingle=1 build_with_chromium=0 libjingle_objc=1 OS=ios target_arch=ia32"
+# export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_ios"
+# export GYP_CROSSCOMPILE=1
+
+
 jobs:
+
   macos:
+
     runs-on: macos-latest    
     steps:
+
+    - name: make directory
+      run: mkdir webrtc-checkout
+
     - name: clone depot_tools
+      working-directory: webrtc-checkout
       run: |
         git clone --quiet --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
         echo "::add-path::$(pwd)/depot_tools"
-        mkdir -p webrtc-checkout
+
     - name: fetch
       working-directory: webrtc-checkout
       run: fetch --nohooks webrtc
-    - name: ls
-      working-directory: webrtc-checkout
-      run: |
-        ls -lah ~/
-        ls -lah
-        ls -lah src || true
+
     - name: sync
       working-directory: webrtc-checkout
       run: gclient sync
+
     - name: generate build
       working-directory: webrtc-checkout/src
       run: gn gen out/Default
+
+    - name: introspect build
+      working-directory: webrtc-checkout/src
+      run: gn args out/Default --list
+      
     - name: build
       working-directory: webrtc-checkout/src
       run: ninja -C out/Default
+
+    - name: list
+      working-directory: webrtc-checkout/src/out/Default
+      run: ls -lah

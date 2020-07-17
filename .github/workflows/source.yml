@@ -1,0 +1,36 @@
+
+name: CI
+
+on: [ push ]
+
+jobs:
+
+  macos:
+    runs-on: macos-latest    
+    steps:
+
+    - name: make directory
+      run: mkdir webrtc-checkout
+
+    - name: clone depot_tools
+      working-directory: webrtc-checkout
+      run: |
+        git clone --quiet --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+        echo "::add-path::$(pwd)/depot_tools"
+
+    - name: fetch
+      working-directory: webrtc-checkout
+      run: fetch --nohooks webrtc
+
+    - name: sync
+      working-directory: webrtc-checkout
+      run: gclient sync
+
+    - name: package
+      working-directory: webrtc-checkout
+      run: tar -zcf ~/source.tar.gz .
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: source
+        path: ~/source.tar.gz
