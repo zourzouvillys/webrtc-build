@@ -34,7 +34,7 @@ jobs:
 
     - name: generate build
       working-directory: webrtc-checkout/src
-      run: gn gen out/Default "--args=enable_iterator_debugging=false is_component_build=false is_debug=false symbol_level=1 mac_deployment_target=10.15.0 mac_min_system_version=10.15.0 mac_sdk_min=10.15 proprietary_codecs=true rtc_build_examples=true rtc_include_ilbc=false rtc_opus_variable_complexity=true"
+      run: gn gen out/Default '--args=enable_iterator_debugging=false is_component_build=false is_debug=false symbol_level=1 mac_deployment_target="10.15.0" mac_min_system_version="10.15.0" mac_sdk_min="10.15" proprietary_codecs=true rtc_build_examples=true rtc_include_ilbc=false rtc_opus_variable_complexity=true'
 
     - name: introspect build
       working-directory: webrtc-checkout/src
