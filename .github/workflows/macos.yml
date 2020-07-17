@@ -1,9 +1,35 @@
+
 name: CI
+
 on: [push]
+
 jobs:
+
   macos:
+
     runs-on: macos-latest    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Build WebRTC
-      run: ./build.sh
+
+    - uses: actions/checkout@v2
+      name: checkout local repo
+
+    - uses: actions/checkout@v2
+      name: checkout depot_tools
+      with:
+        repository: https://chromium.googlesource.com/chromium/tools/depot_tools.git
+        path: depot_tools
+        
+    - name: add depot_tools to path
+      run: echo "::add-path::$GITHUB_WORKSPACE/depot_tools"
+      
+
+
+
+
+    # - name: Build WebRTC
+    #   run: ./build.sh
+
+
+
+
